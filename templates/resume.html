@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Category Prediction</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #0d1b2a;
+            color: white;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 30px auto;
+            padding: 25px;
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        h1, h2 {
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        p, li {
+            font-size: 16px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .upload-section {
+            margin-top: 20px;
+        }
+
+        input[type="file"] {
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        input[type="submit"] {
+            padding: 12px 20px;
+            background: #ff5722;
+            color: white;
+            font-size: 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background: #ff784e;
+        }
+
+        .output-section {
+            margin-top: 20px;
+            padding: 15px;
+            background: #1e293b;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Resume Screening AI</h1>
+        <p>Upload a PDF or TXT resume and get categorized job recommendations.</p>
+        <ul>
+            <li>✅ Resume Categorization</li>
+            <li>✅ Job Recommendation</li>
+            <li>✅ Information Extraction</li>
+        </ul>
+    </div>
+
+    <!-- <div class="container">
+        <h2>Upload Your Resume</h2>
+        <form action="/pred" method="post" enctype="multipart/form-data" onsubmit="showSuccess()">
+            <input type="file" name="resume" id="resume" accept=".pdf, .txt" required>
+            <input type="submit" value="Submit">
+        </form>
+        
+    </div>     -->
+    <div class="container">
+        <h2>Upload Your Resume</h2>
+        <form action="/pred" method="post" enctype="multipart/form-data">
+            <div style="display: flex; align-items: center;">
+                <input type="file" name="resume" id="resume" accept=".pdf, .txt" required onchange="displayFileName()">
+                <span id="file-name" style="color: white; margin-left: 10px;"></span>
+            </div>
+            <input type="submit" value="Submit">
+        </form>
+    </div>    
+    
+    <script>
+        function displayFileName() {
+            var input = document.getElementById('resume');
+            var fileName = input.files.length > 0 ? input.files[0].name : "No file chosen";
+            document.getElementById('file-name').textContent = fileName;
+        }
+    </script>
+    
+    
+
+    {% if predicted_category %}
+    <div class="container output-section">
+        <h2>Prediction Results</h2>
+        <p><b>Category:</b> {{ predicted_category }}</p>
+        <p><b>Recommended Job:</b> {{ recommended_job }}</p>
+        <hr>
+        <h2>Extracted Information</h2>
+        <p><b>Name:</b> {{ name }}</p>
+        <p><b>Phone No:</b> {{ phone }}</p>
+        <p><b>Email:</b> {{ email }}</p>
+
+        {% if extracted_skills %}
+        <h3>Skills</h3>
+        <ul>
+            {% for skill in extracted_skills %}
+            <li>🔹 {{ skill }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+    {% endif %}
+</body>
+
+</html>
